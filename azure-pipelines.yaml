@@ -61,17 +61,19 @@ stages:
               docker buildx rm builder
               docker buildx create --name builder --driver docker-container --use
               docker buildx inspect --bootstrap
-              docker buildx build --push --platform linux/amd64 -t $(imageRepository):build-$(Build.BuildNumber)-amd64 -f src/ES.SFTP.Host/Dockerfile src
-              docker pull $(imageRepository):build-$(Build.BuildNumber)-amd64
-            displayName: "Build Docker image for amd64"
+              docker buildx build --push --platform linux/arm -t $(imageRepository):build-$(Build.BuildNumber)-arm -f src/ES.SFTP.Host/Dockerfile src
+              docker pull $(imageRepository):build-$(Build.BuildNumber)-arm
+            displayName: "Build Docker image for arm"
+
           - script: |
               docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
               docker buildx rm builder
               docker buildx create --name builder --driver docker-container --use
               docker buildx inspect --bootstrap
-              docker buildx build --push --platform linux/arm -t $(imageRepository):build-$(Build.BuildNumber)-arm -f src/ES.SFTP.Host/Dockerfile src
-              docker pull $(imageRepository):build-$(Build.BuildNumber)-arm
-            displayName: "Build Docker image for arm"
+              docker buildx build --push --platform linux/amd64 -t $(imageRepository):build-$(Build.BuildNumber)-amd64 -f src/ES.SFTP.Host/Dockerfile src
+              docker pull $(imageRepository):build-$(Build.BuildNumber)-amd64
+            displayName: "Build Docker image for amd64"
+
           - script: |
               docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
               docker buildx rm builder
