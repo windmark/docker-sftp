@@ -50,6 +50,12 @@ stages:
             inputs:
               dockerVersion: '19.03.9'
 
+          - task: Docker@2
+            displayName: "Docker Login"
+            inputs:
+              containerRegistry: "Emberstack Docker Hub"
+              command: login
+
           - script: |
               docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
               docker buildx rm builder
@@ -85,11 +91,17 @@ stages:
           - download: current
             artifact: 'helm'    
 
+          - task: DockerInstaller@0
+            displayName: 'Install docker'
+            inputs:
+              dockerVersion: '19.03.9'
+
           - task: Docker@2
             displayName: "Docker Login"
             inputs:
               containerRegistry: "Emberstack Docker Hub"
               command: login
+              
 
           - task: HelmInstaller@1
             inputs:
